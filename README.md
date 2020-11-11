@@ -84,3 +84,12 @@ miyaichi
 
 The open source license used is the 2-clause BSD license
 
+
+
+
+
+
+## Nathaly comments
+Execution: 
+
+./adstxt_crawler.py -t targetdomains.txt -d adstxt.db -v

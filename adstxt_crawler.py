@@ -60,8 +60,8 @@ import socket
 import sqlite3
 import logging
 from optparse import OptionParser
-# OR from urllib.parse import urlparse
-from urlparse import urlparse
+from urllib.parse import urlparse
+# or from urlparse import urlparse
 import requests
 import re
 import tempfile
@@ -233,7 +233,7 @@ def crawl_to_db(ahost, referral_domain=False):
         # remove BOM and non ascii text
         text = r.text.encode('utf_8')
         text = text.decode('utf-8-sig').encode('utf_8')
-        text = re.sub(re.compile('[^\x20-\x7E\r\n]'), '', text)
+        text = re.sub(re.compile('[^\x20-\x7E\r\n]'), '', text.decode())
 
         logging.debug('-------------')
         logging.debug(r.request.headers)
@@ -243,9 +243,9 @@ def crawl_to_db(ahost, referral_domain=False):
 
         with tempfile.NamedTemporaryFile(delete=False) as tmp_csv_file:
             tmpfile = tmp_csv_file.name
-            tmp_csv_file.write(text)
+            tmp_csv_file.write(text.encode())
 
-        with open(tmpfile, 'rb') as tmp_csv_file:
+        with open(tmpfile, 'r') as tmp_csv_file:
             # read the line, split on first comment and keep what is to the
             # left (if any found)
             line_reader = csv.reader(
@@ -337,7 +337,7 @@ def crawl_to_db(ahost, referral_domain=False):
 def load_url_queue(csvfilename, url_queue):
     cnt = 0
 
-    with open(csvfilename, 'rU') as csvfile:
+    with open(csvfilename, 'r') as csvfile:
         targets_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in targets_reader:
 
